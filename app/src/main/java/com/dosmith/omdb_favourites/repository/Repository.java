@@ -83,7 +83,7 @@ public class Repository {
         activeReqCount += 1;
         // Build the URL
         StringBuilder urlBuilder = new StringBuilder();
-        urlBuilder.append("https://www.omdbfavourites.com/?apikey=2904fe35");
+        urlBuilder.append("https://www.omdbapi.com/?apikey=2904fe35");
         for (String paramKey : params.keySet()){
             urlBuilder.append("&");
             urlBuilder.append(paramKey);
@@ -213,7 +213,7 @@ public class Repository {
         movieDetails = null;
         // build the url
         StringBuilder urlBuilder = new StringBuilder();
-        urlBuilder.append("https://www.omdbfavourites.com/?apikey=2904fe35&i=");
+        urlBuilder.append("https://www.omdbapi.com/?apikey=2904fe35&i=");
         urlBuilder.append(imdbId);
         String url = urlBuilder.toString();
 
