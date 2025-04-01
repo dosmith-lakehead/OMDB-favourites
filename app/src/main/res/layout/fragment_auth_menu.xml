@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    android:gravity="center"
+    tools:context=".views.AuthMenuFragment">
+
+    <Space
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight=".05"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnShowLogin"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:textColor="@color/whiteSmoke"
+        android:textSize="20sp"
+        android:backgroundTint="@color/slate"
+        android:text="Login"
+        android:layout_weight=".4"/>
+
+    <Space
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight=".1"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnShowRegister"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:textColor="@color/whiteSmoke"
+        android:textSize="20sp"
+        android:backgroundTint="@color/slate"
+        android:text="Register"
+        android:layout_weight=".4"/>
+
+    <Space
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight=".05"/>
+
+</LinearLayout>
