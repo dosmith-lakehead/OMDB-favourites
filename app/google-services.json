@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "932756462524",
+    "project_id": "comp3025-assign3",
+    "storage_bucket": "comp3025-assign3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:932756462524:android:49c6fd33e1bc2b5877e9b9",
+        "android_client_info": {
+          "package_name": "com.dosmith.omdb_favourites"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD24FesoQT9OZg364V7lDQ8C7KTXdKxVJs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
