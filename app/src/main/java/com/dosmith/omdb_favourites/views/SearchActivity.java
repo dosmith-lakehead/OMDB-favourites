@@ -35,6 +35,7 @@ public class SearchActivity extends AppCompatActivity implements SearchFormFragm
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        viewModel.setUID(getIntent().getStringExtra("uID"));
     }
 
     // This fancy little listener shrinks the search fragment. I think it looks neat.

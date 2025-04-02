@@ -40,6 +40,14 @@ public class SearchActivityViewModel extends ViewModel {
         return searchMessage;
     }
 
+    private MutableLiveData<String> uID = new MutableLiveData<>();
+    public void setUID(String input){
+        uID.setValue(input);
+    }
+    public LiveData<String> getUID(){
+        return uID;
+    }
+
     // Use a background thread to ask the repository to fetch a page of results.
     // If there are additional results to fetch for the given query, append them
     // into searchResults.

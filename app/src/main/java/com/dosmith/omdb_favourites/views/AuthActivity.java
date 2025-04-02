@@ -1,5 +1,6 @@
 package com.dosmith.omdb_favourites.views;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -14,6 +15,8 @@ import androidx.lifecycle.ViewModelProvider;
 import com.dosmith.omdb_favourites.R;
 import com.dosmith.omdb_favourites.databinding.ActivityAuthBinding;
 import com.dosmith.omdb_favourites.viewmodels.AuthActivityViewModel;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class AuthActivity extends AppCompatActivity {
 
@@ -43,7 +46,13 @@ public class AuthActivity extends AppCompatActivity {
             transaction.commit();
         });
 
-
-
+        viewModel.getUserName().observe(this, userName -> {
+            if (!userName.isEmpty()){
+                Intent proceedToMain = new Intent(getApplicationContext(), SearchActivity.class);
+                proceedToMain.putExtra("uID", viewModel.getUserId().getValue());
+                proceedToMain.putExtra("userName", viewModel.getUserName().getValue());
+                startActivity(proceedToMain);
+            }
+        });
     }
 }

@@ -6,12 +6,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.dosmith.omdb_favourites.databinding.FragmentLoginBinding;
+import com.dosmith.omdb_favourites.viewmodels.AuthActivityViewModel;
 
 public class LoginFragment extends Fragment {
 
     FragmentLoginBinding binding;
+    AuthActivityViewModel viewModel;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -33,6 +36,14 @@ public class LoginFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentLoginBinding.inflate(inflater, container, false);
+        viewModel = new ViewModelProvider(requireActivity()).get(AuthActivityViewModel.class);
+
+        binding.btnLogin.setOnClickListener(v-> {
+            if (!binding.etPassword.getText().toString().isEmpty() && !binding.etEmail.getText().toString().isEmpty()) {
+                viewModel.login(binding.etEmail.getText().toString(), binding.etPassword.getText().toString());
+            }
+        });
+
         return binding.getRoot();
     }
 }
