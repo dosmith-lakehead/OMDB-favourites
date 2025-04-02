@@ -32,10 +32,11 @@ public class SearchActivity extends AppCompatActivity implements SearchFormFragm
         setContentView(binding.getRoot());
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0);
             return insets;
         });
         viewModel.setUID(getIntent().getStringExtra("uID"));
+        viewModel.setUsername(getIntent().getStringExtra("userName"));
     }
 
     // This fancy little listener shrinks the search fragment. I think it looks neat.

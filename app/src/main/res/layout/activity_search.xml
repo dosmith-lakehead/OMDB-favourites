@@ -45,10 +45,46 @@
             android:id="@+id/searchFormContainer"
             android:name="com.dosmith.omdb_favourites.views.SearchFormFragment"
             android:layout_width="match_parent"
-            android:layout_height="55dp"
+            android:layout_height="135dp"
             android:layout_weight="1" />
 
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="bottom"
+        android:background="@android:color/transparent">
+
+        <Space
+            android:id="@+id/filler2"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0"
+            android:background="@android:color/transparent"/>
+
+        <LinearLayout
+            android:id="@+id/favBtnContainer"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_weight="0"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal"
+            android:background="@color/slate"
+            android:clickable="true">
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnFavourites"
+                android:layout_width="wrap_content"
+                android:layout_height="55dp"
+                android:layout_marginTop="10dp"
+                android:backgroundTint="@color/whiteSmoke"
+                android:textColor="@color/black"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:text="Favourites"/>
+        </LinearLayout>
     </LinearLayout>
 
 </FrameLayout>

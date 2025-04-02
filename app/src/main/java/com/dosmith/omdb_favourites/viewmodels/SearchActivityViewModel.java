@@ -47,6 +47,14 @@ public class SearchActivityViewModel extends ViewModel {
     public LiveData<String> getUID(){
         return uID;
     }
+    private MutableLiveData<String> username = new MutableLiveData<>();
+
+    public void setUsername(String input){
+        username.setValue(input);
+    }
+    public LiveData<String> getUsername(){
+        return username;
+    }
 
     // Use a background thread to ask the repository to fetch a page of results.
     // If there are additional results to fetch for the given query, append them
