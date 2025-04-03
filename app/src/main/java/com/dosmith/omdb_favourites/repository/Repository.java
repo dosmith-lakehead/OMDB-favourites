@@ -12,6 +12,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.dosmith.omdb_favourites.R;
+import com.dosmith.omdb_favourites.models.FavouriteItem;
 import com.dosmith.omdb_favourites.models.MovieDetails;
 import com.dosmith.omdb_favourites.models.SearchResult;
 import com.dosmith.omdb_favourites.utilities.VolleySingleton;
@@ -22,6 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Map;
 
 // This isn't exactly the pattern discussed in class, so let me explain:
@@ -41,12 +43,12 @@ public class Repository {
     // context because Volley needs it.
     private static Context context;
 
-    // TODO: use this or remove it
     private static String searchMessage;
 
     // These variables contain the results of the API calls,
     // formatted into instances of my model classes.
     private static ArrayList<SearchResult> searchResults;
+    private static ArrayList<FavouriteItem> favourites;
     private static MovieDetails movieDetails;
 
     // Context setter
@@ -63,6 +65,9 @@ public class Repository {
     }
     public static ArrayList<SearchResult> getSearchResults(){
         return searchResults;
+    }
+    public static ArrayList<FavouriteItem> getFavourites(){
+        return favourites;
     }
     public static MovieDetails getMovieDetails(){
         return movieDetails;
@@ -295,6 +300,60 @@ public class Repository {
         }
     }
 
+    public static void getImage(FavouriteItem favourite, int i){
+        // If the listed poster URL isn't "N/A"
+        if (!favourite.getPosterURL().equals("N/A")) {
+            // A request is pending
+            activeReqCount += 1;
+            // create the request, using the posterURL property of searchResult as the url
+            ImageRequest imgRequest = new ImageRequest(favourite.getPosterURL(), new Response.Listener<Bitmap>() {
+                @Override
+                public void onResponse(Bitmap response) {
+                    // On a successful response, set searchResult's posterImg property and insert it into searchResults
+                    favourite.setPosterImg(response);
+                    favourites.set(i, favourite);
+                    activeReqCount -= 1;
+                }
+            }, 300, 448, ImageView.ScaleType.CENTER, Bitmap.Config.ARGB_8888, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    // If we don't get a 200 response, the image couldn't be retrieved.
+                    // We're going to use a default image in that case.
+                    favourite.setPosterImg(BitmapFactory.decodeResource(context.getResources(), R.drawable.no_poster));
+                    favourites.set(i, favourite);
+                    activeReqCount -= 1;
+                }
+            });
+
+            //See addResultsPage method for explanation of the below lines
+            imgRequest.setRetryPolicy(new DefaultRetryPolicy(5000,
+                    0,
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+            VolleySingleton.getInstance(context).addToRequestQueue(imgRequest);
+        }
+        // Here, the poster URL WAS "N/A" so we use the placeholder.
+        else {
+            favourite.setPosterImg(BitmapFactory.decodeResource(context.getResources(), R.drawable.no_poster));
+            favourites.set(i, favourite);
+        }
+    }
+
+    public static void populateFavourites(ArrayList<FavouriteItem> inputFavourites){
+        favourites = new ArrayList<>(inputFavourites.size());
+        for (int i = 0; i < inputFavourites.size(); i++){
+            favourites.add(null);
+        }
+        inputFavourites.sort(Comparator.comparing(FavouriteItem::getDateAdded, Comparator.reverseOrder()));
+        for (int i=0; i<inputFavourites.size();i++){
+            getImage(inputFavourites.get(i), i);
+        }
+    }
+
+    public static void addFavourite(FavouriteItem inputFavourite){
+        favourites.add(0, null);
+        getImage(inputFavourite, 0);
+    }
 
     // Clear out the repository of searchResults
     public static void reset(){

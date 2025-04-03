@@ -2,23 +2,40 @@ package com.dosmith.omdb_favourites.viewmodels;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.dosmith.omdb_favourites.models.FavouriteItem;
+import com.dosmith.omdb_favourites.models.MovieDetails;
 import com.dosmith.omdb_favourites.models.SearchResult;
 import com.dosmith.omdb_favourites.repository.Repository;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 // ViewModel for the search activity
 public class SearchActivityViewModel extends ViewModel {
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
     // The list of SearchResults to expose to the view
     private MutableLiveData<ArrayList<SearchResult>> searchResults = new MutableLiveData<>(new ArrayList<>());
+    private MutableLiveData<ArrayList<FavouriteItem>> favourites = new MutableLiveData<>(new ArrayList<>());
     // Tracks what page of results has been queried so far
+    private MutableLiveData<Boolean> showFavourites = new MutableLiveData<>(false);
     private int resultsPage = 0;
     // Tracks if all the results queryable for a given search have been queried
     private boolean allResultsLoaded = false;
@@ -35,6 +52,9 @@ public class SearchActivityViewModel extends ViewModel {
     }
     public LiveData<ArrayList<SearchResult>> getSearchResults(){
         return searchResults;
+    }
+    public LiveData<ArrayList<FavouriteItem>> getFavourites(){
+        return favourites;
     }
     public LiveData<String> getSearchMessage(){
         return searchMessage;
@@ -54,6 +74,12 @@ public class SearchActivityViewModel extends ViewModel {
     }
     public LiveData<String> getUsername(){
         return username;
+    }
+    public void toggleFavourites(){
+        showFavourites.setValue(!showFavourites.getValue());
+    }
+    public LiveData<Boolean> getShowFavourite(){
+        return showFavourites;
     }
 
     // Use a background thread to ask the repository to fetch a page of results.
@@ -98,6 +124,78 @@ public class SearchActivityViewModel extends ViewModel {
             });
             backgroundThread.start();
         }
+    }
+
+    public void populateFavourites(){
+        ArrayList<FavouriteItem> tempFavourites = new ArrayList<>();
+        CollectionReference users = db.collection("Users");
+        Query query = users.whereEqualTo("UserId", uID.getValue()).limit(1);
+        query.get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        Log.d("DBQuery", "Querying for uID");
+                        if (task.isSuccessful()) {
+                            if(!task.getResult().isEmpty()){
+                                CollectionReference userFavourites = task.getResult().getDocuments().get(0).getReference().collection("Favourites");
+                                userFavourites.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                                FavouriteItem item = new FavouriteItem();
+                                                item.setTitle(document.get("Title").toString());
+                                                item.setDescription(document.get("Description").toString());
+                                                item.setImdbID(document.get("IMDBID").toString());
+                                                item.setPosterURL(document.get("PosterURL").toString());
+                                                Timestamp date = (Timestamp) document.get("DateAdded");
+                                                item.setDateAdded(date.toDate());
+                                                item.setImdbRating(document.get("IMDBRating").toString());
+                                                tempFavourites.add(item);
+                                            }
+
+                                            Thread backgroundThread = new Thread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    Looper.prepare();
+                                                    Handler handler = new Handler(Looper.myLooper());
+                                                    handler.post(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            // query
+                                                            Repository.populateFavourites(tempFavourites);
+                                                            // wait
+                                                            while (Repository.getActiveReqCount() > 0){
+                                                                try {
+                                                                    Thread.sleep(10);
+                                                                } catch (InterruptedException e) {
+                                                                    throw new RuntimeException(e);
+                                                                }
+                                                            }
+                                                            favourites.postValue(Repository.getFavourites());
+                                                        }
+                                                    });
+                                                    Looper.loop();
+                                                }
+                                            });
+                                            backgroundThread.start();
+
+
+                                        } else {
+                                            Log.d("DBQuery", "Error getting documents: ", task.getException());
+                                        }
+                                    }
+                                });
+                            }
+                        } else {
+                            Log.d("Auth", "Well shit.");
+                        }
+                    }
+                });
+    }
+
+    public void refreshFavourites(){
+        this.favourites.setValue(Repository.getFavourites());
     }
 
     // called from the view, this feeds search params into the ViewModel

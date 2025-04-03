@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_gravity="center_vertical"
+    android:layout_marginTop="10dp"
+    android:layout_marginBottom="30dp"
+    android:layout_marginStart="10dp"
+    android:layout_marginEnd="10dp"
+    android:background="@drawable/search_result_background"
+    tools:context=".views.FavouritesListFragment">
+
+    <ImageView
+        android:id="@+id/imgPoster"
+        android:layout_width="150dp"
+        android:layout_height="225dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="50dp"
+        android:src="@drawable/no_poster"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/etTitle"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:text="Title"
+            android:layout_marginBottom="10dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/etYear"
+            android:textSize="16sp"
+            android:gravity="start"
+            android:text="Release Year: 1989"
+            android:layout_marginBottom="10dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/rating"
+            android:textSize="16sp"
+            android:gravity="start"
+            android:text="IMDB Rating: 9"
+            android:layout_marginBottom="10dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/description"
+            android:textSize="16sp"
+            android:gravity="start"
+            android:text="Description: Blah Blah Blah"
+            android:layout_marginBottom="10dp" />
+
+    </LinearLayout>
+    <Space
+        android:layout_width="15dp"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

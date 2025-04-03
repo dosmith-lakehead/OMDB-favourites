@@ -7,6 +7,28 @@
     tools:context=".views.SearchActivity">
 
     <LinearLayout
+        android:id="@+id/favouritesContainerContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="bottom"
+        android:background="@android:color/transparent">
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/favouritesContainer"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:name="com.dosmith.omdb_favourites.views.FavouritesListFragment" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="@android:color/transparent"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/searchResultsContainerContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -47,8 +69,6 @@
             android:layout_width="match_parent"
             android:layout_height="135dp"
             android:layout_weight="1" />
-
-
     </LinearLayout>
 
     <LinearLayout

@@ -41,6 +41,13 @@ public class DetailsActivity extends AppCompatActivity {
             return insets;
         });
 
+        viewModel.setUID(getIntent().getStringExtra("uID"));
+        viewModel.setUsername(getIntent().getStringExtra("userName"));
+
+        binding.btnFavourite.setOnClickListener(v->{
+            viewModel.addOneFavourite();
+        });
+
         // When the ViewModel's movieDetails property changes:
         viewModel.getMovieDetails().observe(this, movieDetails -> {
             // Display all the info in the view

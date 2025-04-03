@@ -15,7 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.dosmith.omdb_favourites.databinding.FragmentSearchResultsBinding;
+import com.dosmith.omdb_favourites.models.FavouriteItem;
 import com.dosmith.omdb_favourites.models.SearchResult;
+import com.dosmith.omdb_favourites.utilities.FavouritesListAdapter;
 import com.dosmith.omdb_favourites.utilities.SearchResultsAdapter;
 import com.dosmith.omdb_favourites.viewmodels.SearchActivityViewModel;
 
@@ -107,6 +109,8 @@ public class SearchResultsFragment extends Fragment implements SearchResultsAdap
     public void onItemClick(SearchResult searchResult) {
         Intent intent = new Intent(this.getContext().getApplicationContext(), DetailsActivity.class);
         intent.putExtra("imdbId", searchResult.getImdbID());
+        intent.putExtra("uID", viewModel.getUID().getValue());
+        intent.putExtra("userName", viewModel.getUsername().getValue());
         startActivity(intent);
     }
 }

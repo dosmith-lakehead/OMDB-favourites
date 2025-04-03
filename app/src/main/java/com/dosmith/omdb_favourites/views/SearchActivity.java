@@ -2,6 +2,7 @@ package com.dosmith.omdb_favourites.views;
 
 import android.animation.ValueAnimator;
 import android.os.Bundle;
+import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.LinearLayout;
 
@@ -10,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.dosmith.omdb_favourites.R;
@@ -37,6 +40,20 @@ public class SearchActivity extends AppCompatActivity implements SearchFormFragm
         });
         viewModel.setUID(getIntent().getStringExtra("uID"));
         viewModel.setUsername(getIntent().getStringExtra("userName"));
+
+        viewModel.populateFavourites();
+
+        binding.btnFavourites.setOnClickListener(v->{
+            viewModel.toggleFavourites();
+        });
+
+        viewModel.getShowFavourite().observe(this, bool->{
+            binding.favouritesContainerContainer.setVisibility(bool ? View.VISIBLE : View.INVISIBLE);
+            binding.searchFormContainer.setVisibility(!bool ? View.VISIBLE : View.INVISIBLE);
+            binding.searchResultsContainerContainer.setVisibility(!bool ? View.VISIBLE : View.INVISIBLE);
+            binding.btnFavourites.setText(bool ? "Search" : "Favourites");
+            viewModel.refreshFavourites();
+        });
     }
 
     // This fancy little listener shrinks the search fragment. I think it looks neat.

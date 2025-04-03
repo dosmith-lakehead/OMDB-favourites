@@ -73,7 +73,6 @@ public class AuthActivityViewModel extends ViewModel {
                             userInfo.put("Username", username);
                             userInfo.put("Email Address", email);
                             userInfo.put("UserId", currentUser.getUid());
-                            userInfo.put("Favourites", new ArrayList<String>());
                             db.collection("Users").add(userInfo).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                                 @Override
                                 public void onComplete(@NonNull Task<DocumentReference> task) {
