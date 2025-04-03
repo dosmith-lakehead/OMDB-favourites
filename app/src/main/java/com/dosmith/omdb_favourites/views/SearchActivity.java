@@ -41,6 +41,8 @@ public class SearchActivity extends AppCompatActivity implements SearchFormFragm
         viewModel.setUID(getIntent().getStringExtra("uID"));
         viewModel.setUsername(getIntent().getStringExtra("userName"));
 
+
+
         viewModel.populateFavourites();
 
         binding.btnFavourites.setOnClickListener(v->{
@@ -93,5 +95,10 @@ public class SearchActivity extends AppCompatActivity implements SearchFormFragm
         });
         // GO!
         animator.start();
+    }
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        viewModel.populateFavourites();
     }
 }

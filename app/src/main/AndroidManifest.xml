@@ -15,6 +15,9 @@
         android:theme="@style/Theme.Omdbfavourites"
         tools:targetApi="31">
         <activity
+            android:name=".views.FavouritesDetailsActivity"
+            android:exported="false" />
+        <activity
             android:name=".views.SearchActivity"
             android:exported="false" />
         <activity

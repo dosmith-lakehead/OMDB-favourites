@@ -25,6 +25,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Map;
+import java.util.Objects;
 
 // This isn't exactly the pattern discussed in class, so let me explain:
 
@@ -353,6 +354,15 @@ public class Repository {
     public static void addFavourite(FavouriteItem inputFavourite){
         favourites.add(0, null);
         getImage(inputFavourite, 0);
+    }
+
+    public static void removeOneFavourite(FavouriteItem inputFavourite){
+        for (FavouriteItem item : favourites){
+            if(Objects.equals(item.getImdbID(), inputFavourite.getImdbID())){
+                favourites.remove(item);
+                break;
+            }
+        }
     }
 
     // Clear out the repository of searchResults

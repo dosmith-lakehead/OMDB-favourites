@@ -144,6 +144,7 @@ public class SearchActivityViewModel extends ViewModel {
                                         if (task.isSuccessful()) {
                                             for (QueryDocumentSnapshot document : task.getResult()) {
                                                 FavouriteItem item = new FavouriteItem();
+                                                item.setYear(document.get("Year").toString());
                                                 item.setTitle(document.get("Title").toString());
                                                 item.setDescription(document.get("Description").toString());
                                                 item.setImdbID(document.get("IMDBID").toString());
@@ -194,8 +195,53 @@ public class SearchActivityViewModel extends ViewModel {
                 });
     }
 
+    public void removeOneFavourite(FavouriteItem item){
+        CollectionReference users = db.collection("Users");
+        Query query = users.whereEqualTo("UserId", uID.getValue()).limit(1);
+        query.get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        Log.d("DBQuery", "Querying for uID");
+                        if (task.isSuccessful()) {
+                            if (!task.getResult().isEmpty()) {
+                                CollectionReference userFavourites = task.getResult().getDocuments().get(0).getReference().collection("Favourites");
+                                Query favouritesQuery = userFavourites.whereEqualTo("IMDBID", item.getImdbID());
+                                favouritesQuery.get()
+                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                Log.d("DBQuery", "Getting specific favourite");
+                                                if (task.isSuccessful()) {
+                                                    if (!task.getResult().isEmpty()) {
+                                                        task.getResult().getDocuments().get(0).getReference().delete()
+                                                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                    @Override
+                                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                                        Log.d("DBQuery", "Getting specific favourite");
+                                                                        if (task.isSuccessful()) {
+                                                                            Log.d("DBQuery", "favourite deleted");
+                                                                            Repository.removeOneFavourite(item);
+                                                                            refreshFavourites();
+                                                                        } else {
+                                                                            Log.d("DBQuery", "Delete failed");
+                                                                        }
+                                                                    }
+                                                                });
+                                                    }
+                                                } else {
+                                                    Log.d("DBQuery", "Getting specific favourite failed");
+                                                }
+                                            }
+                                        });
+                            }
+                        }
+                    }
+                });
+    }
+
     public void refreshFavourites(){
-        this.favourites.setValue(Repository.getFavourites());
+        this.favourites.postValue(Repository.getFavourites());
     }
 
     // called from the view, this feeds search params into the ViewModel

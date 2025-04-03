@@ -97,6 +97,7 @@ public class DetailsActivityViewModel extends ViewModel {
                                 CollectionReference userFavourites = task.getResult().getDocuments().get(0).getReference().collection("Favourites");
                                 Map<String, Object> newFavourite = new HashMap<>();
                                 newFavourite.put("Title", movie.getTitle());
+                                newFavourite.put("Year", movie.getYear());
                                 newFavourite.put("Description", movie.getPlot());
                                 newFavourite.put("PosterURL", movie.getPosterURL());
                                 newFavourite.put("IMDBID", movie.getImdbID());
@@ -104,6 +105,7 @@ public class DetailsActivityViewModel extends ViewModel {
                                 newFavourite.put("IMDBRating", movie.getImdbRating());
                                 FavouriteItem item = new FavouriteItem();
                                 item.setTitle(newFavourite.get("Title").toString());
+                                item.setYear(newFavourite.get("Year").toString());
                                 item.setDescription(newFavourite.get("Description").toString());
                                 item.setImdbID(newFavourite.get("IMDBID").toString());
                                 item.setPosterURL(newFavourite.get("PosterURL").toString());

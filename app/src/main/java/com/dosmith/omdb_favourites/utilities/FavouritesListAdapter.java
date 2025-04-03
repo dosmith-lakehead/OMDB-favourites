@@ -19,12 +19,17 @@ public class FavouritesListAdapter extends RecyclerView.Adapter<FavouritesListAd
 
     // The On-Click listener
     private FavouriteItemViewHolder.OnItemClickListener listener;
+    private FavouriteItemViewHolder.UnfavouriteListener unfavouriteListener;
 
     // ViewHolder class
     public static class FavouriteItemViewHolder extends RecyclerView.ViewHolder {
         // This interface is used to handle clicks
         public interface OnItemClickListener {
             void onItemClick(FavouriteItem favouriteItem);
+        }
+
+        public interface UnfavouriteListener {
+            void onUnfavourite(FavouriteItem favouriteItem);
         }
 
         // The binding for the view
@@ -41,8 +46,8 @@ public class FavouritesListAdapter extends RecyclerView.Adapter<FavouritesListAd
         public void bind(FavouriteItem favouriteItem){
             binding.etTitle.setText(favouriteItem.getTitle());
             binding.etYear.setText("Release Year: " + favouriteItem.getYear());
-            binding.rating.setText("IMDB Rating: " + favouriteItem.getImdbID());
-            binding.description.setText("Description: " + favouriteItem.getDescription());
+            binding.rating.setText("IMDB Rating: " + favouriteItem.getImdbRating());
+            binding.description.setText("Description:\n\n" + favouriteItem.getDescription());
             if (favouriteItem.getPosterImg() != null) {
                 binding.imgPoster.setImageBitmap(favouriteItem.getPosterImg());
             }
@@ -53,9 +58,10 @@ public class FavouritesListAdapter extends RecyclerView.Adapter<FavouritesListAd
     }
 
     // Adapter constructor. take a list of FavouritesList and a listener
-    public FavouritesListAdapter(List<FavouriteItem> objects, FavouriteItemViewHolder.OnItemClickListener listener) {
+    public FavouritesListAdapter(List<FavouriteItem> objects, FavouriteItemViewHolder.OnItemClickListener listener, FavouriteItemViewHolder.UnfavouriteListener unfavouriteListener) {
         this.favouriteItems = objects;
         this.listener = listener;
+        this.unfavouriteListener = unfavouriteListener;
     }
 
     // On creation of a new view holder, pass the binding to the viewholder's constructor.
@@ -74,6 +80,9 @@ public class FavouritesListAdapter extends RecyclerView.Adapter<FavouritesListAd
         holder.bind(currentItem);
         holder.itemView.setOnClickListener(v->{
             listener.onItemClick(searchResult);
+        });
+        holder.binding.btnUnfavourite.setOnClickListener(v->{
+            unfavouriteListener.onUnfavourite(currentItem);
         });
     }
 

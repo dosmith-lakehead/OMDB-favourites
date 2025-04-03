@@ -22,7 +22,7 @@ import com.dosmith.omdb_favourites.viewmodels.SearchActivityViewModel;
 
 // This fragment will display search results.
 // I've cleverly, even deviously, stacked it behind the search form.
-public class FavouritesListFragment extends Fragment implements FavouritesListAdapter.FavouriteItemViewHolder.OnItemClickListener  {
+public class FavouritesListFragment extends Fragment implements FavouritesListAdapter.FavouriteItemViewHolder.OnItemClickListener, FavouritesListAdapter.FavouriteItemViewHolder.UnfavouriteListener  {
     FragmentFavouritesListBinding binding;
     SearchActivityViewModel viewModel;
     FavouritesListAdapter adapter;
@@ -42,7 +42,7 @@ public class FavouritesListFragment extends Fragment implements FavouritesListAd
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(requireActivity()).get(SearchActivityViewModel.class);
         // Instantiate my custom adapter class
-        adapter = new FavouritesListAdapter(viewModel.getFavourites().getValue(), this);
+        adapter = new FavouritesListAdapter(viewModel.getFavourites().getValue(), this, this);
     }
 
     @Override
@@ -74,10 +74,15 @@ public class FavouritesListFragment extends Fragment implements FavouritesListAd
 
     @Override
     public void onItemClick(FavouriteItem favouriteItem) {
-        Intent intent = new Intent(this.getContext().getApplicationContext(), DetailsActivity.class);
+        Intent intent = new Intent(this.getContext().getApplicationContext(), FavouritesDetailsActivity.class);
         intent.putExtra("imdbId", favouriteItem.getImdbID());
         intent.putExtra("uID", viewModel.getUID().getValue());
         intent.putExtra("userName", viewModel.getUsername().getValue());
         startActivity(intent);
+    }
+
+    @Override
+    public void onUnfavourite(FavouriteItem favouriteItem) {
+        viewModel.removeOneFavourite(favouriteItem);
     }
 }
