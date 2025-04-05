@@ -33,33 +33,40 @@ import java.util.concurrent.Executor;
 
 import javax.xml.transform.Result;
 
+// ViewModel for authentication
 public class AuthActivityViewModel extends ViewModel {
+    // Track the userId of a successful login
     private MutableLiveData<String> userId = new MutableLiveData<>();
+    // Track the username of a successful login
     private MutableLiveData<String> userName = new MutableLiveData<>();
+    // This tracks which fragment (login / register) to display
     private MutableLiveData<Fragment> authFragment = new MutableLiveData<>();
-
+    // References to firebase auth and firestore
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-
+    // Functions to set the displayed fragment
     public void setLoginFragment() {
         authFragment.setValue(new LoginFragment());
     }
-
     public void setRegisterFragment() {
         authFragment.setValue(new RegisterFragment());
     }
-
+    // Getter for the view to listen to, so it can see which fragment to display
     public LiveData<Fragment> getAuthFragment() {
         return authFragment;
     }
+    // Getters for userId and userName
+    public LiveData<String> getUserId() {return userId;}
+    public LiveData<String> getUserName() {return userName;}
 
-    public LiveData<String> getUserId() {
-        return userId;
-    }
-    public LiveData<String> getUserName() {
-        return userName;
-    }
-
+    /**
+     * takes an email, password and username. Attempts to register the user with firebase auth.
+     * On success, inserts user information into Firestore. I'd like to do more robust
+     * error handling here but I simply don't have time
+     * @param email
+     * @param password
+     * @param username
+     */
     public void registerUser(String email, String password, String username) {
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -96,6 +103,13 @@ public class AuthActivityViewModel extends ViewModel {
 
     }
 
+    /**
+     * Takes an email and password. Attempts to login the user using firebase auth.
+     * On success, stores the uID of the user for later use.
+     * Also tries to get the related username from Firestore.
+     * @param email
+     * @param password
+     */
     public void login(String email, String password){
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {

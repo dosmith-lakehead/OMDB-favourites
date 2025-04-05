@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.dosmith.omdb_favourites.databinding.FragmentAuthMenuBinding;
 import com.dosmith.omdb_favourites.viewmodels.AuthActivityViewModel;
 
+// Little menu fragment
 public class AuthMenuFragment extends Fragment {
 
     FragmentAuthMenuBinding binding;

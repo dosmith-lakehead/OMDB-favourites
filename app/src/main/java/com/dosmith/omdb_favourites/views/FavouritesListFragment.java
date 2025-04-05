@@ -62,6 +62,13 @@ public class FavouritesListFragment extends Fragment implements FavouritesListAd
             adapter.updateData(viewModel.getFavourites().getValue());
         });
 
+        viewModel.getUsername().observe(getViewLifecycleOwner(), txt->{
+            if (txt != null){
+                String usernameFavourite = txt + (txt.charAt(txt.length()-2) == 's' ? "' Favourites" : "'s Favourites");
+                binding.tvUsername.setText(usernameFavourite);
+            }
+        });
+
         // If the user scrolls to the bottom of the results, and there are more
         // results to get, get them.
 

@@ -119,10 +119,12 @@ public class FavouritesDetailsActivity extends AppCompatActivity {
             finish();
         });
 
+        // Link up the remove favourite button
         binding.btnFavourite.setOnClickListener(v->{
             viewModel.removeOneFavourite();
         });
 
+        // Link up the update button
         binding.btnUpdate.setOnClickListener(v->{
             viewModel.editFavourite(binding.etSummary.getText().toString());
         });
@@ -131,26 +133,31 @@ public class FavouritesDetailsActivity extends AppCompatActivity {
             if (b){finish();}
         });
 
-        // After having set up the view to observe the ViewModel,
-        // all that's left is to get the imdbId from the intent and
-        // use it to query for details.
+
         Intent intent = getIntent();
         String imdbId = intent.getStringExtra("imdbId");
+
+        // Once the id has been posted the viewmodel, set the userFavourites collection reference
         viewModel.getUID().observe(this, id->{
             if (id != null){
                 viewModel.setUserFavourites();
             }
         });
+
+        // Once the userFavourites collection referenc has been posted the viewmodel,
+        // Get the MovieDetails
         viewModel.getUserFavourites().observe(this, favs -> {
             if (favs != null){
                 viewModel.queryMovieDetails(imdbId);
             }
         });
+        // Once the movieDetails has been obtained, get the Description
         viewModel.getMovieDetails().observe(this, movieDetails -> {
             if (movieDetails != null){
                 viewModel.setFavouriteDescription();
             }
         });
+        // Now set the uID, setting off the above chain
         viewModel.setUID(getIntent().getStringExtra("uID"));
 
 

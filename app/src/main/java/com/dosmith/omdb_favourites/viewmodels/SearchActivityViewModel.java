@@ -33,9 +33,11 @@ public class SearchActivityViewModel extends ViewModel {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     // The list of SearchResults to expose to the view
     private MutableLiveData<ArrayList<SearchResult>> searchResults = new MutableLiveData<>(new ArrayList<>());
+    // The list of FavouriteItems to expose to the view
     private MutableLiveData<ArrayList<FavouriteItem>> favourites = new MutableLiveData<>(new ArrayList<>());
-    // Tracks what page of results has been queried so far
+    // Bring favourites to front or not
     private MutableLiveData<Boolean> showFavourites = new MutableLiveData<>(false);
+    // Tracks what page of results has been queried so far
     private int resultsPage = 0;
     // Tracks if all the results queryable for a given search have been queried
     private boolean allResultsLoaded = false;
@@ -75,9 +77,11 @@ public class SearchActivityViewModel extends ViewModel {
     public LiveData<String> getUsername(){
         return username;
     }
+    // Switch between showing favourites on top and not
     public void toggleFavourites(){
         showFavourites.setValue(!showFavourites.getValue());
     }
+    // getter for the view to observe to see if it should show favourites on top or not
     public LiveData<Boolean> getShowFavourite(){
         return showFavourites;
     }
@@ -126,6 +130,8 @@ public class SearchActivityViewModel extends ViewModel {
         }
     }
 
+    // Get a list of FavouriteItems from the DB, then send them to the repository
+    // to attach images and store them in memory
     public void populateFavourites(){
         ArrayList<FavouriteItem> tempFavourites = new ArrayList<>();
         CollectionReference users = db.collection("Users");
@@ -195,6 +201,7 @@ public class SearchActivityViewModel extends ViewModel {
                 });
     }
 
+    // Remove a specific FavouriteItem from the repository and DB
     public void removeOneFavourite(FavouriteItem item){
         CollectionReference users = db.collection("Users");
         Query query = users.whereEqualTo("UserId", uID.getValue()).limit(1);

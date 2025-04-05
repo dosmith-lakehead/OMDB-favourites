@@ -25,8 +25,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+// This viewmodel works similar to DetailsActivityViewModel but is adapted
+// for displaying MovieDetails with one field overwritten by a FavouriteItem.
 public class FavouritesDetailsActivityViewModel extends ViewModel {
+    // Reference to firestore
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    // A reference to the Favourites subcollection for the current user
     private MutableLiveData<CollectionReference> userFavourites = new MutableLiveData<>();
     private MutableLiveData<String> favouriteDescription = new MutableLiveData<>();
 
@@ -61,6 +65,7 @@ public class FavouritesDetailsActivityViewModel extends ViewModel {
         return userFavourites;
     }
 
+    // Get the MovieDetails object related to the an imdb ID
     public void queryMovieDetails(String imdbId){
         movieDetails.setValue(null);
         Thread backgroundThread = new Thread(new Runnable() {
@@ -91,6 +96,7 @@ public class FavouritesDetailsActivityViewModel extends ViewModel {
         backgroundThread.start();
     }
 
+    // Set the collection reference for the users Favourites subcollection
     public void setUserFavourites(){
         CollectionReference users = db.collection("Users");
         Query userQuery = users.whereEqualTo("UserId", uID.getValue()).limit(1);
@@ -111,6 +117,7 @@ public class FavouritesDetailsActivityViewModel extends ViewModel {
                 });
     }
 
+    // Get the Description to display from the DB
     public void setFavouriteDescription(){
         Query favouritesQuery = userFavourites.getValue().whereEqualTo("IMDBID", movieDetails.getValue().getImdbID());
         favouritesQuery.get()
@@ -130,6 +137,7 @@ public class FavouritesDetailsActivityViewModel extends ViewModel {
                 });
     }
 
+    // Remove the relevant favourite from the repository and the DB
     public void removeOneFavourite(){
         Query favouritesQuery = userFavourites.getValue().whereEqualTo("IMDBID", movieDetails.getValue().getImdbID());
         favouritesQuery.get()
@@ -161,6 +169,8 @@ public class FavouritesDetailsActivityViewModel extends ViewModel {
                     }
                 });
     }
+
+    // Update the description of a FavouriteItem in the db and the repository
     public void editFavourite(String description){
         Query favouritesQuery = userFavourites.getValue().whereEqualTo("IMDBID", movieDetails.getValue().getImdbID());
         favouritesQuery.get()

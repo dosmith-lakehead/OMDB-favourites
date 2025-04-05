@@ -83,9 +83,15 @@ public class DetailsActivityViewModel extends ViewModel {
         backgroundThread.start();
     }
 
+    /**
+     * This function adds a FavouriteItem corresponding to the MovieDetails
+     * being displayed to the repository, and posts appropriate info to
+     * Firestore to save it.
+     */
     public void addOneFavourite(){
         MovieDetails movie = movieDetails.getValue();
         CollectionReference users = db.collection("Users");
+        // Get the document in the DB pertaining to the stored uID
         Query query = users.whereEqualTo("UserId", uID.getValue()).limit(1);
         query.get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -94,7 +100,9 @@ public class DetailsActivityViewModel extends ViewModel {
                         Log.d("DBQuery", "Querying for uID");
                         if (task.isSuccessful()) {
                             if(!task.getResult().isEmpty()){
+                                // If the document was successfully retrieved:
                                 CollectionReference userFavourites = task.getResult().getDocuments().get(0).getReference().collection("Favourites");
+                                // Create data to add to Firestore from the MovieDetails
                                 Map<String, Object> newFavourite = new HashMap<>();
                                 newFavourite.put("Title", movie.getTitle());
                                 newFavourite.put("Year", movie.getYear());
@@ -103,6 +111,7 @@ public class DetailsActivityViewModel extends ViewModel {
                                 newFavourite.put("IMDBID", movie.getImdbID());
                                 newFavourite.put("DateAdded", new Timestamp(new Date()));
                                 newFavourite.put("IMDBRating", movie.getImdbRating());
+                                // Create a new FavouriteItem with the same data
                                 FavouriteItem item = new FavouriteItem();
                                 item.setTitle(newFavourite.get("Title").toString());
                                 item.setYear(newFavourite.get("Year").toString());
@@ -112,10 +121,14 @@ public class DetailsActivityViewModel extends ViewModel {
                                 Timestamp date = (Timestamp) newFavourite.get("DateAdded");
                                 item.setDateAdded(date.toDate());
                                 item.setImdbRating(newFavourite.get("IMDBRating").toString());
+                                // Post the data to the DB
                                 userFavourites.add(newFavourite).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                                     @Override
                                     public void onComplete(@NonNull Task<DocumentReference> task) {
                                         if (task.isSuccessful()) {
+                                            // If the data is successfully posted, send the FavouriteItem
+                                            // to the repository to get the image and add it to
+                                            // Repository.favourites
                                             Thread backgroundThread = new Thread(new Runnable() {
                                                 @Override
                                                 public void run() {

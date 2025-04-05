@@ -40,14 +40,18 @@ public class AuthActivity extends AppCompatActivity {
 
         fragmentManager = getSupportFragmentManager();
 
+        // Observe which auth fragment to display from the viewmodel, and display
+        // the appropriate one.
         viewModel.getAuthFragment().observe(this, f->{
             FragmentTransaction transaction = fragmentManager.beginTransaction();
             transaction.replace(binding.authFragmentContainer.getId(), f);
             transaction.commit();
         });
 
+        // If the viewmodel is storing aa username, it means the user has logged in.
         viewModel.getUserName().observe(this, userName -> {
             if (!userName.isEmpty()){
+                // Proceed to main activity (SearchActivity)
                 Intent proceedToMain = new Intent(getApplicationContext(), SearchActivity.class);
                 proceedToMain.putExtra("uID", viewModel.getUserId().getValue());
                 proceedToMain.putExtra("userName", viewModel.getUserName().getValue());

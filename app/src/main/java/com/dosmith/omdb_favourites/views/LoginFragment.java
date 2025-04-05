@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.dosmith.omdb_favourites.databinding.FragmentLoginBinding;
 import com.dosmith.omdb_favourites.viewmodels.AuthActivityViewModel;
 
+// Simple login fragment
 public class LoginFragment extends Fragment {
 
     FragmentLoginBinding binding;
@@ -38,6 +39,7 @@ public class LoginFragment extends Fragment {
         binding = FragmentLoginBinding.inflate(inflater, container, false);
         viewModel = new ViewModelProvider(requireActivity()).get(AuthActivityViewModel.class);
 
+        // Hook up to the relevant viewmodel method
         binding.btnLogin.setOnClickListener(v-> {
             if (!binding.etPassword.getText().toString().isEmpty() && !binding.etEmail.getText().toString().isEmpty()) {
                 viewModel.login(binding.etEmail.getText().toString(), binding.etPassword.getText().toString());

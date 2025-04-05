@@ -49,6 +49,9 @@ public class SearchActivity extends AppCompatActivity implements SearchFormFragm
             viewModel.toggleFavourites();
         });
 
+        // This isn't the most efficient way to do it, but without a major refactor...
+        // I just hide either the search form or the favourites form depending on
+        // a boolean from the viewmodel
         viewModel.getShowFavourite().observe(this, bool->{
             binding.favouritesContainerContainer.setVisibility(bool ? View.VISIBLE : View.INVISIBLE);
             binding.searchFormContainer.setVisibility(!bool ? View.VISIBLE : View.INVISIBLE);

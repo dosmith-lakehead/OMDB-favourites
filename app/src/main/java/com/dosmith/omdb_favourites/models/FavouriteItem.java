@@ -7,9 +7,13 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * This class has a subset of the fields of MovieDetails, and also
+ * a dateAdded field for sorting purposes
+ */
 public class FavouriteItem implements Serializable {
 
-        // annotations allow GSON to deserialize capitalized JSON into my uncapitalized fields.
+
         private String title;
         private String year;
         private String imdbID;

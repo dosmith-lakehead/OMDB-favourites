@@ -301,6 +301,12 @@ public class Repository {
         }
     }
 
+    /**
+     * Gets bitmap image for FavouriteItem, then adds it to the repository in the correct place.
+     * Works a lot like the version for MovieDetails objects
+     * @param favourite
+     * @param i
+     */
     public static void getImage(FavouriteItem favourite, int i){
         // If the listed poster URL isn't "N/A"
         if (!favourite.getPosterURL().equals("N/A")) {
@@ -340,6 +346,12 @@ public class Repository {
         }
     }
 
+    /**
+     * Takes an input list of FavouriteItem objects and sets the size of
+     * the favourites field to match, then passes each object to getImage,
+     * where they will be given images and inserted in order into favourites
+     * @param inputFavourites
+     */
     public static void populateFavourites(ArrayList<FavouriteItem> inputFavourites){
         favourites = new ArrayList<>(inputFavourites.size());
         for (int i = 0; i < inputFavourites.size(); i++){
@@ -351,11 +363,19 @@ public class Repository {
         }
     }
 
+    /**
+     * Add a single FavouriteItem to the repository
+     * @param inputFavourite
+     */
     public static void addFavourite(FavouriteItem inputFavourite){
         favourites.add(0, null);
         getImage(inputFavourite, 0);
     }
 
+    /**
+     * Remove a single favourites item from the repository
+     * @param inputFavourite
+     */
     public static void removeOneFavourite(FavouriteItem inputFavourite){
         for (FavouriteItem item : favourites){
             if(Objects.equals(item.getImdbID(), inputFavourite.getImdbID())){

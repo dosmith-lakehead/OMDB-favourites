@@ -166,6 +166,9 @@ public class SearchFormFragment extends Fragment {
             int i = 1;
         });
 
+        String welcomeString = "Welcome, " + viewModel.getUsername().getValue() + "!";
+        binding.tvMessage.setText(welcomeString);
+
         return binding.getRoot();
     }
 }

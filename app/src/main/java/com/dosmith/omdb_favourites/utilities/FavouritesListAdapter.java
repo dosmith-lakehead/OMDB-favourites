@@ -11,14 +11,17 @@ import com.dosmith.omdb_favourites.models.FavouriteItem;
 import java.util.ArrayList;
 import java.util.List;
 
-// This class makes views for a RecyclerView from FavouritesList objects
+// Builds on SearchResultsAdapter to make views for a RecyclerView
+// from FavouriteItem objects
 public class FavouritesListAdapter extends RecyclerView.Adapter<FavouritesListAdapter.FavouriteItemViewHolder> {
 
-    // The list of FavouritesList
+    // The list of FavouriteItems
     private List<FavouriteItem> favouriteItems;
 
     // The On-Click listener
     private FavouriteItemViewHolder.OnItemClickListener listener;
+
+    // Listener for the remove button
     private FavouriteItemViewHolder.UnfavouriteListener unfavouriteListener;
 
     // ViewHolder class
@@ -27,7 +30,7 @@ public class FavouritesListAdapter extends RecyclerView.Adapter<FavouritesListAd
         public interface OnItemClickListener {
             void onItemClick(FavouriteItem favouriteItem);
         }
-
+        // This interface handles removing an item
         public interface UnfavouriteListener {
             void onUnfavourite(FavouriteItem favouriteItem);
         }
@@ -57,7 +60,7 @@ public class FavouritesListAdapter extends RecyclerView.Adapter<FavouritesListAd
         }
     }
 
-    // Adapter constructor. take a list of FavouritesList and a listener
+    // Adapter constructor. take a list of FavouritesList and two listeners
     public FavouritesListAdapter(List<FavouriteItem> objects, FavouriteItemViewHolder.OnItemClickListener listener, FavouriteItemViewHolder.UnfavouriteListener unfavouriteListener) {
         this.favouriteItems = objects;
         this.listener = listener;

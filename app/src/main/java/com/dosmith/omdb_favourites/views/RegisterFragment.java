@@ -14,6 +14,7 @@ import com.dosmith.omdb_favourites.viewmodels.AuthActivityViewModel;
 import java.util.HashMap;
 import java.util.Map;
 
+// Simple register fragment
 public class RegisterFragment extends Fragment {
 
     FragmentRegisterBinding binding;
@@ -41,6 +42,7 @@ public class RegisterFragment extends Fragment {
         binding = FragmentRegisterBinding.inflate(inflater, container, false);
         viewModel = new ViewModelProvider(requireActivity()).get(AuthActivityViewModel.class);
 
+        // Hook up to the relevant viewmodel method
         binding.btnRegister.setOnClickListener(v-> {
             if (!binding.etPassword.getText().toString().isEmpty() &&
                     !binding.etEmail.getText().toString().isEmpty() &&
